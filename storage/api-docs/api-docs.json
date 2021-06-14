@@ -1,0 +1,1118 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Weatherise Api Documentation",
+        "description": "Api Documentation for Weatherise, A Weather App",
+        "contact": {
+            "email": "danielokoronkwo90@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "api/v1/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Sign Up",
+                "description": "Signup with firstname, lastname, email, password",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "firstname",
+                                    "lastname",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "firstname": {
+                                        "description": "new user's firstname",
+                                        "type": "string",
+                                        "example": "Anthony"
+                                    },
+                                    "lastname": {
+                                        "description": "new user's lastname",
+                                        "type": "string",
+                                        "example": "Nwaizugbe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "anthonynwaizugbe@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "PassWord12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Wrong URL response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sorry, Url not found check your spelling and try again."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "User created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User successfully registered."
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Sign in",
+                "description": "Login by email, password",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Pass user credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "danielokoronkwo@yahoo.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "PassWord12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYxODY1OTIyNiwiZXhwIjoxNjE4NjYyODI2LCJuYmYiOjE2MTg2NTkyMjYsImp0aSI6ImltaDdQdG9HZzdoeWRBRjYiLCJzdWIiOjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Lq7IJe-YNvuZjxmp-c-EKQj3RxncW8gpHpSt8dn7mfg"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "readOnly": "true",
+                                            "example": "3600"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Wrong credentials response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sorry, wrong email address or password. Please try again"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Logout currently authenticated user",
+                "operationId": "authLogout",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "'User successfully signed out!!!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Request new token",
+                "description": "Generate new token for the currently authenticated user and invalidate the old token",
+                "operationId": "authrefresh",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2MTYyMzcxMDEsImV4cCI6MTYxNjI0MDcwMSwibmJmIjoxNjE2MjM3MTAxLCJqdGkiOiJrSngzSlRzRGlhT0h1ckNKIiwic3ViIjoyMSwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.pLUchLOEGmIv2Ns120sEZBuJj57YnAJEJuCFsuvXK4A"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "readOnly": "true",
+                                            "example": "3600"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/auth/profile": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get Profile Information",
+                "description": "Get currently authenticated user information",
+                "operationId": "authFindUserById",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/email/resetPassword": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Reset Password",
+                "description": "Reset Password passing token, email, password and password_confirmation",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Pass Password reset credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "UclOkLRUrvypm2tmt9t4sbgb5t7bNCxEvbwssABd"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "danielokoronkwo@yahoo.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password12345"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "password12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Wrong URL response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid Url Provided."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Wrong email or token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Either your token or email is wrong."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Email Verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password has been updated successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/location": {
+            "get": {
+                "tags": [
+                    "Favourite Locations"
+                ],
+                "summary": "Get all available location associated with the currently authenticated user",
+                "description": "The user sending this request must be authenticated",
+                "operationId": "location",
+                "responses": {
+                    "200": {
+                        "description": "Successfully returning exact data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Location"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when no location is found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Location not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Favourite Locations"
+                ],
+                "summary": "Store a new location",
+                "description": "The user sending this request must be authenticated",
+                "operationId": "location",
+                "requestBody": {
+                    "description": "Pass Location data reference",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "city_name",
+                                    "city_key"
+                                ],
+                                "properties": {
+                                    "city_name": {
+                                        "type": "string",
+                                        "example": "New York"
+                                    },
+                                    "city_key": {
+                                        "type": "integer",
+                                        "example": "232"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "New City Added successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Location"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Returns when the user has reached their maximum limit of 5 locations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You have reached your maximum limit"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/location{id}": {
+            "get": {
+                "tags": [
+                    "Favourite Locations"
+                ],
+                "summary": "Get a single location associated with the currently authenticated user",
+                "description": "The user sending this request must be authenticated",
+                "operationId": "location",
+                "responses": {
+                    "200": {
+                        "description": "Successfully returning exact data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Location"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when no location is found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Location not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/location/{id}": {
+            "put": {
+                "tags": [
+                    "Favourite Locations"
+                ],
+                "summary": "Update a single location associated with the currently authenticated user",
+                "description": "The user sending this request must be authenticated",
+                "operationId": "location",
+                "requestBody": {
+                    "description": "Pass updated Location data reference",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "city_name",
+                                    "city_key"
+                                ],
+                                "properties": {
+                                    "city_name": {
+                                        "type": "string",
+                                        "example": "Manchester"
+                                    },
+                                    "city_key": {
+                                        "type": "integer",
+                                        "example": "010"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully returning exact data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Location updated successfully"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": "31"
+                                        },
+                                        "user_id": {
+                                            "type": "integer",
+                                            "example": "6"
+                                        },
+                                        "city_name": {
+                                            "type": "string",
+                                            "example": "Manchester"
+                                        },
+                                        "city_key": {
+                                            "type": "string",
+                                            "example": "010"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "2019-02-25 12:59:20"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "readOnly": "true",
+                                            "example": "2019-02-25 12:59:20"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Returns when the user tries updating a resource with another userId other than theirs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Action forbidden"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Favourite Locations"
+                ],
+                "summary": "Delete a single location associated with the currently authenticated user",
+                "description": "The user sending this request must be authenticated",
+                "operationId": "location",
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted exact data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Location deleted successfully"
+                                        },
+                                        "location": {
+                                            "type": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Returns when the user tries to delete a resource with another userId other than theirs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Action forbidden"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "api/v1/sendPasswordResetLink": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Request Password Reset Link",
+                "description": "Request Password Reset Link passing User's email",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Pass Password Reset credential",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "",
+                                        "example": "danielokoronkwo@yahoo.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email Sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Reset password link sent to you email successfully, please check your inbox."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/email/verify/{id}": {
+            "get": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Verify email by Id",
+                "description": "Email Verification using Id,expires, hash, signature",
+                "operationId": "authLogin",
+                "requestBody": {
+                    "description": "Pass email verification credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "expires",
+                                    "hash",
+                                    "signature"
+                                ],
+                                "properties": {
+                                    "expires": {
+                                        "type": "string",
+                                        "example": "1619949484"
+                                    },
+                                    "hash": {
+                                        "type": "string",
+                                        "example": "6a8b54fb68efe1ba5f99dfd2a23f2e310a224356"
+                                    },
+                                    "signature": {
+                                        "type": "string",
+                                        "example": "135db5e0a887620e625d500055950a7c649bcc48e2ac7b686672097781223e0d"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Wrong URL response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid Email Verification Url."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Email Verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email successfully verified."
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/email/resend": {
+            "get": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Request Email Verification link",
+                "description": "Request for new Email verification link",
+                "operationId": "authLogin",
+                "responses": {
+                    "409": {
+                        "description": "Email Already Verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email Already Verified."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Email ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email verification link sent to your email"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Location": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "31"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "6"
+                    },
+                    "city_name": {
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "New York"
+                    },
+                    "city_key": {
+                        "type": "string",
+                        "example": "232"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "2019-02-25 12:59:20"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "2019-02-25 12:59:20"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "data"
+                }
+            },
+            "User": {
+                "required": [
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "3"
+                    },
+                    "firstname": {
+                        "description": "User role",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Daniel"
+                    },
+                    "lastname": {
+                        "description": "User role",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Okoronkwo"
+                    },
+                    "email": {
+                        "description": "User unique email address",
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": "true",
+                        "example": "danielokoronkwo@yahoo.com"
+                    },
+                    "email_verified_at": {
+                        "description": "Datetime marker of verification status",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2019-02-25 12:59:20"
+                    },
+                    "created_at": {
+                        "description": "date User registered",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "2019-02-25 12:59:20"
+                    },
+                    "updated_at": {
+                        "description": "last date user updated their profile",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "2019-02-25 12:59:20"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "user"
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
