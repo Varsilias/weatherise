@@ -1,3 +1,3 @@
 # Weatherise 
 
-[Link to Documentation of the API ](https://laravel.com/docs/routing).
+## [Link to Weatherise API Documentation](https://weatherise.herokuapp.com/api/docs).
